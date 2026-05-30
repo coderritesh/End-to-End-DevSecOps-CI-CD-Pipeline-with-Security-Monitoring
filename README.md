@@ -2,7 +2,7 @@
 
 A production-style **DevSecOps CI/CD pipeline** that automates building, testing, security scanning, containerization, deployment, and monitoring of a Java Spring Boot web application.
 
-> Built as part of PG-DITISS at CDAC Pune — demonstrating real-world DevSecOps practices used in enterprise environments.
+> Built as part of PG-DITISS Course in Pune — demonstrating real-world DevSecOps practices used in enterprise environments.
 
 ---
 
