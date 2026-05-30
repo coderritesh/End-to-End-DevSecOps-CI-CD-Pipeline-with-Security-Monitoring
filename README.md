@@ -173,7 +173,11 @@ git clone https://github.com/coderritesh/End-to-End-DevSecOps-CI-CD-Pipeline-wit
 
 ---
 
+## 📸 Screenshots
 
+> *(Add screenshots here — Jenkins pipeline view, SonarQube report, Trivy scan output, Grafana dashboard)*
+
+---
 
 ## 🎯 Key Learnings
 
