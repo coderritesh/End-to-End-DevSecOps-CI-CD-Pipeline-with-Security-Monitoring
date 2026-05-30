@@ -1,53 +1,197 @@
-# BoardgameListingWebApp
+# 🚀 End-to-End DevSecOps CI/CD Pipeline with Security & Monitoring
 
-## Description 
+A production-style **DevSecOps CI/CD pipeline** that automates building, testing, security scanning, containerization, deployment, and monitoring of a Java Spring Boot web application.
 
-**Board Game Database Full-Stack Web Application.**
-This web application displays lists of board games and their reviews. While anyone can view the board game lists and reviews, they are required to log in to add/ edit the board games and their reviews. The 'users' have the authority to add board games to the list and add reviews, and the 'managers' have the authority to edit/ delete the reviews on top of the authorities of users.  
+> Built as part of PG-DITISS at CDAC Pune — demonstrating real-world DevSecOps practices used in enterprise environments.
 
-## Technologies
+---
 
-- Java
-- Spring Boot
-- Amazon Web Services(AWS) EC2
-- Thymeleaf
-- Thymeleaf Fragments
-- HTML5
-- CSS
-- JavaScript
-- Spring MVC
-- JDBC
-- H2 Database Engine (In-memory)
-- JUnit test framework
-- Spring Security
-- Twitter Bootstrap
-- Maven
+## 📌 Project Overview
 
-## Features
+This project implements a fully automated CI/CD pipeline that integrates **security at every stage** — from code commit to production deployment — with real-time monitoring using Prometheus and Grafana.
 
-- Full-Stack Application
-- UI components created with Thymeleaf and styled with Twitter Bootstrap
-- Authentication and authorization using Spring Security
-  - Authentication by allowing the users to authenticate with a username and password
-  - Authorization by granting different permissions based on the roles (non-members, users, and managers)
-- Different roles (non-members, users, and managers) with varying levels of permissions
-  - Non-members only can see the boardgame lists and reviews
-  - Users can add board games and write reviews
-  - Managers can edit and delete the reviews
-- Deployed the application on AWS EC2
-- JUnit test framework for unit testing
-- Spring MVC best practices to segregate views, controllers, and database packages
-- JDBC for database connectivity and interaction
-- CRUD (Create, Read, Update, Delete) operations for managing data in the database
-- Schema.sql file to customize the schema and input initial data
-- Thymeleaf Fragments to reduce redundancy of repeating HTML elements (head, footer, navigation)
+The application under test is a **Board Game Listing Web App** (Java Spring Boot + AWS EC2), used as a realistic target to demonstrate the full pipeline.
 
-## How to Run
+---
 
-1. Clone the repository
-2. Open the project in your IDE of choice
-3. Run the application
-4. To use initial user data, use the following credentials.
-  - username: bugs    |     password: bunny (user role)
-  - username: daffy   |     password: duck  (manager role)
-5. You can also sign-up as a new user and customize your role to play with the application! 😊
+## 🏗️ Architecture
+
+```
+Developer
+    │
+    ▼
+GitHub (Code Push)
+    │
+    ▼
+Jenkins (CI/CD Orchestration)
+    │
+    ├─── Maven Compile & Test
+    │
+    ├─── SonarQube (SAST - Static Code Analysis)
+    │
+    ├─── OWASP Dependency-Check (Vulnerable Dependencies)
+    │
+    ├─── Docker Build & Push (DockerHub)
+    │
+    ├─── Trivy (Container Image Vulnerability Scan)
+    │
+    └─── Kubernetes Deploy (Pods + Services)
+              │
+              ▼
+        Prometheus + Blackbox Exporter
+              │
+              ▼
+          Grafana Dashboard
+```
+
+---
+
+## 🔧 Tech Stack
+
+| Category | Tools |
+|---|---|
+| **CI/CD** | Jenkins, GitHub, Maven |
+| **Language/Framework** | Java 17, Spring Boot |
+| **SAST** | SonarQube |
+| **Dependency Scanning** | OWASP Dependency-Check |
+| **Container Security** | Trivy |
+| **Containerization** | Docker |
+| **Orchestration** | Kubernetes (Pods, Deployments, Services) |
+| **Monitoring** | Prometheus, Blackbox Exporter, Grafana |
+| **Cloud** | AWS EC2 |
+
+---
+
+## 🔄 Pipeline Stages
+
+### Stage 1 — Compile
+```groovy
+stage('Compile') {
+    steps {
+        sh 'mvn compile'
+    }
+}
+```
+
+### Stage 2 — Test
+```groovy
+stage('Test') {
+    steps {
+        sh 'mvn test'
+    }
+}
+```
+
+### Stage 3 — Build
+```groovy
+stage('Build') {
+    steps {
+        sh 'mvn package'
+    }
+}
+```
+
+### Stage 4 — Security Scanning
+- **SonarQube** — Static Application Security Testing (SAST), code quality analysis
+- **OWASP Dependency-Check** — Scans Maven dependencies for known CVEs
+- **Trivy** — Scans Docker images for OS and library vulnerabilities
+
+### Stage 5 — Containerize & Push
+- Application packaged into a Docker image using `Dockerfile`
+- Image pushed to DockerHub registry
+
+### Stage 6 — Deploy to Kubernetes
+- Kubernetes `Deployment` and `Service` applied via `deployment-service.yaml`
+- App exposed via NodePort/LoadBalancer service
+
+### Stage 7 — Monitor
+- **Prometheus** scrapes metrics from the application and infrastructure
+- **Blackbox Exporter** monitors endpoint availability (uptime probing)
+- **Grafana** visualizes all metrics in real-time dashboards
+
+---
+
+## 📁 Repository Structure
+
+```
+├── Jenkinsfile.txt          # Jenkins pipeline definition
+├── Dockerfile.txt           # Docker image build instructions
+├── deployment-service.yaml  # Kubernetes Deployment + Service manifest
+├── pom.xml                  # Maven build configuration
+├── sonar-project.properties # SonarQube project config
+├── mvnw / mvnw.cmd          # Maven wrapper scripts
+└── README.md
+```
+
+---
+
+## 🛡️ Security Features
+
+- **SAST** with SonarQube catches code-level vulnerabilities before build
+- **OWASP Dependency-Check** identifies vulnerable third-party libraries
+- **Trivy** ensures container images are scanned before deployment
+- **Pipeline fails** if critical vulnerabilities are found — security as a gate, not an afterthought
+
+---
+
+## 📊 Monitoring Setup
+
+| Tool | Purpose |
+|---|---|
+| Prometheus | Metrics collection from app + infra |
+| Blackbox Exporter | HTTP endpoint uptime monitoring |
+| Grafana | Visualization dashboards |
+
+---
+
+## 🚀 How to Run
+
+### Prerequisites
+- Jenkins server (with JDK 17 and Maven 3 configured as tools)
+- SonarQube server running
+- Docker installed and DockerHub credentials configured in Jenkins
+- Kubernetes cluster (Minikube or cloud-based)
+- Prometheus + Grafana stack deployed
+
+### Steps
+
+1. Clone this repository
+```bash
+git clone https://github.com/coderritesh/End-to-End-DevSecOps-CI-CD-Pipeline-with-Security-Monitoring.git
+```
+
+2. Configure Jenkins:
+   - Add DockerHub credentials (`docker-cred`)
+   - Add SonarQube server in Jenkins settings
+   - Install required plugins: SonarQube Scanner, OWASP Dependency-Check, Docker Pipeline, Kubernetes
+
+3. Create a Jenkins Pipeline job pointing to this repo's `Jenkinsfile`
+
+4. Run the pipeline — all stages execute automatically
+
+5. Access Grafana dashboard to monitor the deployed application
+
+---
+
+## 📸 Screenshots
+
+> *(Add screenshots here — Jenkins pipeline view, SonarQube report, Trivy scan output, Grafana dashboard)*
+
+---
+
+## 🎯 Key Learnings
+
+- Integrating security tools (SonarQube, OWASP, Trivy) into CI/CD pipelines
+- Container image vulnerability scanning before deployment
+- Kubernetes deployment and service configuration
+- Real-time application monitoring with Prometheus and Grafana
+- End-to-end automation from code push to production
+
+---
+
+## 👤 Author
+
+**Ritesh Gurav**
+- 🔗 [LinkedIn](https://linkedin.com/in/ritesh-gurav)
+- 💻 [GitHub](https://github.com/coderritesh)
+- 📧 riteshgurav001@gmail.com
